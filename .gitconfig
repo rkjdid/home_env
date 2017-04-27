@@ -1,0 +1,18 @@
+[user]
+  email = changeme@somewhere.com\n
+  name = dev 36\n\n
+[color]
+  branch = auto
+  diff = auto
+  interactive = auto
+  status = auto
+[core]
+  autocrlf = input
+  editor = vim
+  pager = less -x1,5
+[alias]
+  st = status
+  dc = diff --cached
+
+[push]
+  default = simple
