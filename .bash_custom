@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# some shit to keep a smooth shared ssh-agent on all tty
+export SSH_AGENT_PID=$(ps aux | grep -v 'grep' | grep ssh-agent | grep $(env | grep "USER" | sed s/USER=// | head -n 1) | head -n 1 | awk '{print $2}')
+
+if [ "" != "$SSH_AGENT_PID" ]; then
+  export SSH_AUTH_SOCK=$(find /tmp -iname "agent.$(ps -p $SSH_AGENT_PID -o ppid= | tr -d '[:blank:]')" 2> /dev/null)
+fi
+
+# bcrc
+export BC_ENV_ARGS=~/.bcrc
+
+# maildir
+export MAIL=$HOME/.maildir
+
+
+# disable Ctrl-S (freeze output terminal) & Ctrl-Q (unfreeze)
+stty -ixon
+
+# GO
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export GOTRACEBACK=all
+
