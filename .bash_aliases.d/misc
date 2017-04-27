@@ -1,0 +1,9 @@
+#!/bin/bash
+
+alias ls="ls --color=auto -h --group-directories-first"
+alias ll="ls -l"
+alias la="ls -a"
+alias lla="ll -a"
+alias vim="vim -p"
+
+alias diff="diff --tabsize=2"
