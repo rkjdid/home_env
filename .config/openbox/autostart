@@ -1,0 +1,95 @@
+#!/bin/bash
+
+## Openbox autostart.sh
+## ====================
+## When you login to your CrunchBang Openbox session, this autostart script 
+## will be executed to set-up your environment and launch any applications
+## you want to run at startup.
+##
+## Note*: some programs, such as 'nm-applet' are run via XDG autostart.
+## Run '/usr/lib/openbox/openbox-xdg-autostart --list' to list any
+## XDG autostarted programs.
+##
+## More information about this can be found at:
+## http://openbox.org/wiki/Help:Autostart
+##
+## If you do something cool with your autostart script and you think others
+## could benefit from your hack, please consider sharing it at:
+## http://crunchbang.org/forums/
+##
+## Have fun & happy CrunchBangin'! :)
+
+## GNOME PolicyKit and Keyring
+eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg) &
+
+## Set root window colour ?
+#~ hsetroot -solid "#2E3439" &
+
+## Group start:
+## 3. sleep - give compositor time to start
+## 4. tint2 panel
+(\
+sleep 2s && \
+tint2 \
+) &
+
+## Volume control for systray
+(sleep 2s && pnmixer) &
+#pasystray
+
+## Volume keys daemon
+#xfce4-volumed &
+
+## Enable power management
+xfce4-power-manager &
+
+## Start Thunar Daemon
+thunar --daemon &
+
+## Test if necessary
+## Detect and configure touchpad. See 'man synclient' for more info.
+if egrep -iq 'touchpad' /proc/bus/input/devices; then
+  synclient VertEdgeScroll=0
+  synclient TapButton1=1
+  synclient TapButton2=3
+  synclient TapButton3=2
+  synclient LockedDrags=1
+  synclient LockedDragTimeout=750
+  synclient MaxTapTime=130 MaxDoubleTapTime=130 SingleTapTimeout=130
+  synclient HorizScrollDelta=750
+fi
+
+
+#-----------------------------------------------------------------------
+# X-server configuration
+# Keyboard control
+#-----------------------------------------------------------------------
+# Keyboard Layout (avoid ls | grep) adding fcking bad whitespace w/ latin9 variant
+setxkbmap -layout "fr, fr"
+#setxkbmap -layout "fr, fr" -variant "dvorak"
+#setxkbmap -layout "fr, fr" -variant "bepo"
+
+# Repeat delay(ms) + rate(ms) (default 660 25)
+xset r rate 240 70
+# Enables numlock
+numlockx on
+
+## Disable screen saver
+( sleep 15s && xset -dpms && xset s noblank && xset s off ) &
+
+#-----------------------------------------------------------------------
+# Mouse control
+#-----------------------------------------------------------------------
+# Pointer Speed
+#xset m 7 10 &     # Very Fast
+#xset m 5 4 &     # Faster
+##################~ xset m 3 9 &     # Normal(Fast)
+#~ xset m 8/7 0 &
+# System Default (2 4)
+#xset m default &
+xset m 14/10 7 & #razer
+#xset m 14/10 7 #wt-asus-wireless
+#xset m 6/2 6 #wt-asus-wireless
+
+#qbittorrent --no-splash &
+transmission-gtk -m &
