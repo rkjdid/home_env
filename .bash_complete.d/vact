@@ -1,0 +1,17 @@
+#!/bin/bash
+
+export VENV_HOME="$HOME/v"
+
+_vactCompletion()
+{
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$(ls -1 $VENV_HOME)" -- $cur) )
+}
+
+function vact()
+{
+  source "$VENV_HOME/$1/bin/activate"
+}
+
+complete -F _vactCompletion vact
+
