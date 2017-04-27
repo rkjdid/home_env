@@ -1,0 +1,29 @@
+#!/bin/bash
+
+back=$(pwd)/home_backup
+
+mkdir -p $back
+for f in $(find "$(pwd)" -maxdepth 1 -type f); do
+  [ "$(basename $f)" = ".gitignore" ] && continue
+  [ "$(basename $f)" = "$(basename $0)" ] && continue
+  cp -f "$HOME/$(basename $f)" $back
+  rm -f "$HOME/$(basename $f)"
+  ln -s "$f" "$HOME/"
+done
+
+for d in $(find "$(pwd)" -maxdepth 1 -type d); do
+  [ "$d" = "$back" ] && continue
+  [ "$d" = "$(pwd)" ] && continue
+  [ "$(basename $d)" = ".git" ] && continue
+  mkdir -p "$HOME/$(basename $d)"
+  mkdir -p "$back/$(basename $d)"
+  cp -fr "$HOME/$(basename $d)" "$back/"
+  cd $d
+  for f in $(find "$d" -maxdepth 1 -type f); do
+    cp -f "$HOME/$(basename $d)/$(basename $f)" "$d/"
+    rm -f "$HOME/$(basename $d)/$(basename $f)"
+    ln -s "$f" "$HOME/$(basename $d)/$(basename $f)"
+  done
+  cd ..
+done
+
