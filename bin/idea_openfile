@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# fancy script to open file in idea with pattern "path:line"
+
+[[ "$1" == *":"* ]] || exit 1
+test -f "$(echo "$1" |cut -d':' -f1)" || exit 1
+$HOME/bin/idea --line "$(echo "$1" |cut -d':' -f2)" "$(echo "$1" |cut -d':' -f1)"
+
