@@ -6,6 +6,7 @@ mkdir -p $back
 for f in $(find "$(pwd)" -maxdepth 1 -type f); do
   [ "$(basename $f)" = ".gitignore" ] && continue
   [ "$(basename $f)" = "$(basename $0)" ] && continue
+  [ "$(basename $f)" = "deb_pkg*" ] && continue
   cp -f "$HOME/$(basename $f)" $back
   rm -f "$HOME/$(basename $f)"
   ln -s "$f" "$HOME/"
