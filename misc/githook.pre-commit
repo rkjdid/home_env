@@ -1,0 +1,15 @@
+#!/bin/sh
+# stops before commit if go files in cache aren't go fmt'ed
+
+gofiles=$(git diff --cached --name-only --diff-filter=ACM | grep '.go$')
+[ -z "$gofiles" ] && exit 0
+
+unformatted=$(gofmt -l $gofiles)
+[ -z "$unformatted" ] && exit 0
+
+# Some files are not gofmt'd. Print message and fail.
+for fn in $unformatted; do
+        echo >&2 "  gofmt -w $PWD/$fn"
+done
+echo >&2 "go fmt these files before committing"
+exit 1
