@@ -1,0 +1,19 @@
+#!/bin/bash
+
+gettickurl() {
+  echo "https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=$1&tickInterval=$2"
+}
+
+gettick() {
+  curl $(gettickurl $1 $2) 2> /dev/null
+}
+
+gettickinfo() {
+  t=$(gettick $1 $2)
+  echo "$(date +%H:%M:%S)" - $(jq ".result[0].T" <(echo $t) |sed 's,",,g') - V:$(jq ".result[0].V" <(echo $t)) - C:$(jq ".result[0].C" <(echo $t))
+}
+
+export -f gettickurl
+export -f gettick
+export -f gettickinfo
+
