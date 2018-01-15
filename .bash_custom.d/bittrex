@@ -50,3 +50,26 @@ track() {
 }
 export -f track
 
+# lulz ROI
+# $1: consecutive length,
+# $2: bitbot.log (hits.log),
+# $3: candleLength to check HIGH against
+roi() {
+  local input=$(ack "consecutive: $1" $2)
+  local count=$(ack "consecutive: $1" $2 |wc -l)
+  local total=0
+  local IFS=$'\n'
+  for i in $input; do
+    hit="$(echo $i |awk '{print $4 " " $16}')"; price=$(awk '{print $2}' <(echo $hit))
+    cur=$(awk '{print $1}' <(echo $hit))
+    echo -e "$cur    \t$price"
+    now=$(gettick $cur $3 |jq '.result[0].H' |awk '{ print sprintf("%.9f", $1); }')
+    return=$(echo "$now/$price" |bc)
+    echo -e "    now    \t$now\n    return    \t$return"
+    total=$(echo "$total+$return" |bc)
+  done
+
+  echo "$total over $count entries: you have now $(echo "100*$total/$count" |bc)% money"
+}
+export -f roi
+
