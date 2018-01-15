@@ -1,19 +1,52 @@
 #!/bin/bash
 
+# GetTicks
+getticksurl() {
+  echo "https://bittrex.com/Api/v2.0/pub/market/GetTicks?tickInterval=$2&marketName=$1"
+}
+export -f getticksurl
+
+getticks() {
+  curl $(getticksurl $1 $2) 2> /dev/null
+}
+export -f getticks
+
+getticksinfo() {
+  t=$(getticks $1 $2)
+  echo "$(jq ".result[$3].T" <(echo $t) |sed 's,",,g') - V:$(jq ".result[$3].V" <(echo $t)) - C:$(jq ".result[$3].C" <(echo $t))"
+}
+export -f getticksinfo
+
+# GetLatestTick
 gettickurl() {
   echo "https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=$1&tickInterval=$2"
 }
+export -f gettickurl
 
 gettick() {
   curl $(gettickurl $1 $2) 2> /dev/null
 }
+export -f gettick
 
 gettickinfo() {
   t=$(gettick $1 $2)
   echo "$(date +%H:%M:%S)" - $(jq ".result[0].T" <(echo $t) |sed 's,",,g') - V:$(jq ".result[0].V" <(echo $t)) - C:$(jq ".result[0].C" <(echo $t))
 }
-
-export -f gettickurl
-export -f gettick
 export -f gettickinfo
+
+# Track market
+track() {
+  local cur=$1;
+  local interval=$2;
+  local s=$3;
+  local f="${cur}_${interval}.log"
+  echo "tracking $f every $s"
+
+
+  while true; do
+    gettickinfo $cur $interval |tee -a $f
+    sleep $s
+  done
+}
+export -f track
 
