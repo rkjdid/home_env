@@ -10,6 +10,10 @@ set termencoding=utf8
 set background=dark
 """""""""""""""""""""""""""""""""""
 
+" tab completion: 1st hit select longest, 2nd displays list, third cycles
+set wildmode=longest,list,full
+" display extra line with highlighted current elem while tabbing
+set wildmenu
 
 
 set nocompatible
