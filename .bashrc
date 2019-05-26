@@ -21,7 +21,7 @@ shopt -s checkwinsize
 # colors
 default="\[\033[00m\]"
 root="\[\033[01;91m\]"
-user="\[\033[01;32m\]"
+user="\[\033[01;37m\]"
 paths="\[\033[01;34m\]"
 remote_user="\[\033[01;35m\]"
 remote_path="\[\033[01;36m\]"
@@ -57,6 +57,7 @@ if ! shopt -oq posix; then
 fi
 
 # aliases
+alias sudo='sudo '
 if [ -f $HOME/.bash_aliases ]; then
   . $HOME/.bash_aliases
 fi

@@ -1,6 +1,6 @@
 [user]
-  email = changeme@somewhere.com\n
-  name = dev 36\n\n
+  email = romainknezevic@gmail.com\n
+  name = rkj\n\n
 [color]
   branch = auto
   diff = auto
@@ -19,3 +19,7 @@
   followTags = true
 [url "git@github.com:"]
   insteadOf = https://github.com/
+[init]
+  templatedir = ~/.git-templates
+[pager]
+	branch = false
