@@ -1,0 +1,47 @@
+#!/bin/bash
+
+batpoll() {
+  n=0
+  charging=0
+  ptotal=0
+  for i in $(upower -e |grep BAT); do
+    n=$((n+1))
+    upower -i "$i" |grep state| grep -q discharging
+    charging=$?
+    pp=$(upower -i "$i"|grep percentage |sed 's,[^0-9]*,,' |sed 's,[.%] *$,,')
+    ptotal=$((ptotal+pp))
+  done
+  ptotal=$((ptotal/n))
+}
+
+notif() {
+  u=$1
+  if [ -z "$u" ]; then
+    u="normal"
+  fi
+  t=$2
+  if [ -z "$t" ]; then
+    t=10000
+  fi
+  notify-send --expire-time $t -u "$u" "battery" "$(echo -e "charge: $ptotal%\ncharge me plz")"
+}
+
+warn=true
+crit=true
+while true; do
+  batpoll
+  if [ $charging -eq 1 ]; then
+    warn=true
+    crit=true
+    continue
+  fi
+  if [ $ptotal -lt 10 ] && $crit; then
+    crit=false
+    notif "critical" 0
+  elif [ $ptotal -lt 25 ] && $warn; then
+    warn=false
+    notif "normal" 0
+  fi
+  sleep 30s
+done
+
