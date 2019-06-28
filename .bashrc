@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#dpi fu (font size)
+echo Xft.dpi: 102 | xrdb -merge
+
 # if not running interactively, don't do anything
 case $- in
     *i*) ;;
