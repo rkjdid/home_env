@@ -42,6 +42,8 @@ while true; do
     warn=false
     notif "normal" 0
   fi
+  # < 3%, force suspend
+  [ $ptotal -lt 3 ] && systemctl suspend
   sleep 30s
 done
 
