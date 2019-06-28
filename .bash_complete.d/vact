@@ -10,6 +10,15 @@ _vactCompletion()
 
 function vact()
 {
+  if [ -z "$1" ]; then
+    if [ -f "venv/bin/activate" ]; then
+      source venv/bin/activate
+      return
+    else
+      echo "venv folder not found"
+      return
+    fi
+  fi
   source "$VENV_HOME/$1/bin/activate"
 }
 
