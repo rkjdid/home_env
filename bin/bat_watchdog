@@ -33,6 +33,7 @@ while true; do
   if [ $charging -eq 1 ]; then
     warn=true
     crit=true
+    sleep 30s
     continue
   fi
   if [ $ptotal -lt 10 ] && $crit; then
