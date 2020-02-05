@@ -35,11 +35,6 @@ c1=$user
 c2=$paths
 
 # color prompt - no questions
-if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    PS1="$c1\u@\h$c0:$c2\w$c0\$ "
-else
-    PS1='\u@\h:\w\$ '
-fi
 
 # (?) If this is an xterm set the title to user@host:dir
 case "$TERM" in
@@ -49,6 +44,20 @@ xterm*|rxvt*)
 *)
     ;;
 esac
+
+function set_ps1() {
+  if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+      PS1="$c1\u@\h$c0:$c2\w$c0\$ \[\e]2;\u@\h: \W\\a\]"
+  else
+      PS1='\u@\h:\w\$ '
+  fi
+}
+
+set_ps1
+#function cd() {
+#  command cd "$@" || return
+#  set_ps1
+#}
 
 # enable autocompletion
 if ! shopt -oq posix; then
