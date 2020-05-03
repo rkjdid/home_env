@@ -12,8 +12,8 @@ esac
 # bash history - no size limit, no duplicates, instant append
 HISTCONTROL=ignoreboth
 shopt -s histappend
-export HISTFILESIZE=
-export HISTSIZE=
+export HISTFILESIZE=-1
+export HISTSIZE=-1
 export HISTTIMEFORMAT="[%F %T] "
 export HISTFILE=~/.bash_history
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
