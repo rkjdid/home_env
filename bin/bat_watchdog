@@ -44,7 +44,7 @@ while true; do
     notif "normal" 0
   fi
   # < 3%, force suspend
-  [ $ptotal -lt 3 ] && systemctl suspend
-  sleep 30s
+  [ $ptotal -lt 4 ] && systemctl suspend
+  sleep 15s
 done
 
