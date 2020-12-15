@@ -84,3 +84,5 @@ if [ -d $HOME/.bash_custom.d ]; then
   done
 fi
 
+complete -C /home/rkj/.config/debenv/bin/mc mc
+

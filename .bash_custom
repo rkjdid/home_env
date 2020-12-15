@@ -1,10 +1,14 @@
 #!/bin/bash
 
 # some shit to keep a smooth shared ssh-agent on all tty
-export SSH_AGENT_PID=$(ps aux | grep -v 'grep' | grep ssh-agent | grep $(env | grep "USER" | sed s/USER=// | head -n 1) | head -n 1 | awk '{print $2}')
+export SSH_AGENT_PID=$(ps aux | grep -v 'grep' | grep ssh-agent | grep $(env | grep "USER" | sed s/USERNAME=// | head -n 1) | head -n 1 | awk '{print $2}')
 
 if [ "" != "$SSH_AGENT_PID" ]; then
-  export SSH_AUTH_SOCK=$(find /tmp -iname "agent.$(ps -p $SSH_AGENT_PID -o ppid= | tr -d '[:blank:]')" 2> /dev/null)
+  #export SSH_AUTH_SOCK=$(find /tmp -iname "agent.$(ps -p $SSH_AGENT_PID -o ppid= | tr -d '[:blank:]')" 2> /dev/null)
+
+  # just fucking expect that there is one agent and it's the one we want
+  # somehow above mechanism is now broken
+  export SSH_AUTH_SOCK=$(find /tmp -iname "agent.*" 2> /dev/null)
 fi
 
 # bcrc
@@ -25,3 +29,15 @@ export GO111MODULE=on
 
 export LESS='-R'
 export LESSOPEN='|~/bin/lessfilter %s'
+
+# shift space is weird, replace it with underscore which is also weird.
+#xmodmap -e 'keycode 65 = space underscore space'
+
+export BX_CONFIG=/usr/local/etc/libbitcoin/bx.cfg
+
+
+function rcli() {
+  redis-cli $@
+}
+export -f rcli
+
