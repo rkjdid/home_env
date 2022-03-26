@@ -4,9 +4,9 @@ batpoll() {
   n=0
   charging=0
   ptotal=0
-  for i in $(upower -e |grep BAT); do
+  for i in $(upower -e |grep BAT1); do
     n=$((n+1))
-    upower -i "$i" |grep state| grep -q discharging
+    upower -i "$i" |grep state| egrep -q '(discharging|pending-charge)'
     charging=$?
     pp=$(upower -i "$i"|grep percentage |sed 's,[^0-9]*,,' |sed 's,[.%] *$,,')
     ptotal=$((ptotal+pp))
@@ -44,7 +44,7 @@ while true; do
     notif "normal" 0
   fi
   # < 3%, force suspend
-  [ $ptotal -lt 4 ] && systemctl suspend
+  [ $ptotal -le 4 ] && systemctl suspend
   sleep 15s
 done
 
